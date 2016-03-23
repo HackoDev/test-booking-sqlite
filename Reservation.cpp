@@ -1,5 +1,7 @@
+#include "BaseSQLiteModel.h"
 #include "Reservation.h"
 #include "City.h"
+#include "Room.h"
 
 
 Reservation::Reservation()
@@ -43,7 +45,7 @@ Room* Reservation::get_room()
 
 Hotel* Reservation::get_hotel()
 {
-	return Hotel::get_by_id(get_room()->get_hotel_id());
+	return this->get_room()->get_hotel();
 };
 
 Reservation* Reservation::create(int user_id, int room_id, std::string datetime)

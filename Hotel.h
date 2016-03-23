@@ -2,6 +2,9 @@
 #include <string.h>
 #include <string>
 #include "BaseSQLiteModel.h"
+#include "City.h"
+#include "Country.h"
+#include "User.h"
 
 
 class Hotel :
@@ -31,7 +34,7 @@ public:
 	void set_title(std::string);
 	void set_description(std::string);
 	void set_situated(std::string);
-	void gst_director(std::string);
+	void set_director(std::string);
 	void set_city_id(int);
 	void set_city(City*);
 
@@ -41,7 +44,7 @@ public:
 	static Hotel* get_by_id(int);
 	static Hotel* choice(std::vector<std::string>);
 	static void show_by_user(User*);
-	static void check_free_by_date(std::string);
+	static bool check_free_by_date(std::string);
 	void prepare_params();
 	void load_from_stmt(sqlite3_stmt*);
 	static std::vector<std::string> db_sorted_fields;
