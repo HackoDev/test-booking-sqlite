@@ -88,6 +88,7 @@ Hotel* Hotel::create(std::string title, std::string director, std::string situat
 	hotel->situated = situated;
 	hotel->city_id = city_id;
 	hotel->description = description;
+	return hotel;
 };
 
 std::string Hotel::get_table_name()
