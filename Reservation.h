@@ -15,13 +15,15 @@ private:
 	int city_id;
 	int user_id;
 	int room_id;
-	std::string datetime;
+	std::string start_date;
+	std::string end_date;
 public:
 	Reservation();
 	~Reservation();
 
 	// getters
-	std::string get_datetime();
+	std::string get_start_date();
+	std::string get_end_date();
 	int get_country_id();
 	int get_city_id();
 	City* get_city();
@@ -30,8 +32,10 @@ public:
 	Hotel* get_hotel();
 
 	// setters
-	void set_datetime(std::string);
-	void set_datetime(time_t);
+	std::string set_start_date(std::string);
+	std::string set_start_date(time_t);
+	std::string set_end_date(std::string);
+	std::string set_end_date(time_t);
 	void set_user(User*);
 	void set_city(int);
 	void set_city(City*);
@@ -39,7 +43,7 @@ public:
 	void set_room(Room*);
 
 	// managers
-	static Reservation* create(int, int, std::string);
+	static Reservation* create(int, int, std::string, std::string);
 	static std::string get_table_name();
 	static Reservation* get_by_id(int);
 	static Reservation* choice(std::vector<std::string>);
