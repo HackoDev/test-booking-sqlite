@@ -21,9 +21,9 @@ Hotel* Room::get_hotel()
 	return Hotel::get_by_id(hotel_id);
 };
 
-int Room::get_level()
+int Room::get_position()
 {
-	return level;
+	return position;
 };
 
 std::string Room::get_title()
@@ -35,6 +35,11 @@ std::string Room::get_description()
 {
 	return description;
 };
+
+float Room::get_price()
+{
+	return price;
+}
 
 // setters
 void Room::set_title(std::string value)
@@ -52,15 +57,27 @@ void Room::set_hotel_id(Hotel* value)
 	hotel_id = value->get_id();
 };
 
+void Room::set_position(int value)
+{
+	position = position;
+};
+
+void Room::set_price(float value)
+{
+	price = value;
+}
+
 // managers
-Room* Room::create(std::string title, std::string description, int hotel_id, int level)
+Room* Room::create(std::string title, std::string description, int hotel_id, int position, float price)
 {
 	Room* room = new Room();
 	room->title = title;
 	room->description = description;
 	room->hotel_id = hotel_id;
-	room->level = level;
+	room->position = position;
+	room->price = price;
 	room->save();
+	room->bind_id(Room::get_table_name());
 	return room;
 };
 
@@ -90,12 +107,12 @@ void Room::prepare_params()
 	std::string sql_raw;
 	if (id)
 		sql_raw = "UPDATE `" + get_table_name() + "`\
-				   SET `title`=? SET `description`=? SET `hotel_id`=? SET `level`=? \
+				   SET `title`=? SET `description`=? SET `hotel_id`=? SET `position`=? SET `price`=? \
 				   FROM id=?;";
 	else
 		sql_raw = "INSERT INTO `" + get_table_name() + "`\
-				   (`title`, `description`, `hotel_id`, `level`) \
-				    VALUES(?, ?, ?, ?);";
+				   (`title`, `description`, `hotel_id`, `position`, `price`) \
+				    VALUES(?, ?, ?, ?, ?);";
 	std::cout << sql_raw << std::endl;
 	int rc = sqlite3_prepare_v2(db_link, sql_raw.c_str(), -1, &stmp, 0);
 	// data binding
@@ -105,9 +122,11 @@ void Room::prepare_params()
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
 	if (sqlite3_bind_int(stmp, 3, hotel_id) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
-	if (sqlite3_bind_int(stmp, 4, level) != SQLITE_OK)
+	if (sqlite3_bind_int(stmp, 4, position) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
-	if (id && sqlite3_bind_int(stmp, 5, id) != SQLITE_OK)
+	if (sqlite3_bind_int(stmp, 5, price) != SQLITE_OK)
+		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
+	if (id && sqlite3_bind_int(stmp, 6, id) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
 	// exec sql raw
 	if (sqlite3_step(stmp) != SQLITE_DONE)
@@ -122,7 +141,8 @@ void Room::load_from_stmt(sqlite3_stmt* stmt)
 	this->title = std::string((char*)sqlite3_column_text(stmt, 1));
 	this->description = std::string((char*)sqlite3_column_text(stmt, 2));
 	this->hotel_id = sqlite3_column_int(stmt, 3);
-	this->level= sqlite3_column_int(stmt, 4);
+	this->position = sqlite3_column_int(stmt, 4);
+	this->price = sqlite3_column_int(stmt, 5);
 };
 
-std::vector<std::string> Room::db_sorted_fields = {"id", "title", "description", "hotel_id", "level"};
+std::vector<std::string> Room::db_sorted_fields = {"id", "title", "description", "hotel_id", "position", "price"};

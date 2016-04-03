@@ -17,11 +17,15 @@ private:
 	int room_id;
 	std::string start_date;
 	std::string end_date;
+	float price;
+	std::string note;
 public:
 	Reservation();
 	~Reservation();
 
 	// getters
+	float get_price();
+	std::string get_note();
 	std::string get_start_date();
 	std::string get_end_date();
 	int get_country_id();
@@ -32,18 +36,19 @@ public:
 	Hotel* get_hotel();
 
 	// setters
-	std::string set_start_date(std::string);
-	std::string set_start_date(time_t);
-	std::string set_end_date(std::string);
-	std::string set_end_date(time_t);
-	void set_user(User*);
-	void set_city(int);
-	void set_city(City*);
-	void set_room(int);
-	void set_room(Room*);
-
+	void set_price(float value);
+	void set_note(std::string value);
+	void set_start_date(std::string value);
+	void set_start_date(time_t value);
+	void set_end_date(std::string value);
+	void set_end_date(time_t value);
+	void set_user(User* value);
+	void set_city(int value);
+	void set_city(City* value);
+	void set_room(int value);
+	void set_room(Room* value);
 	// managers
-	static Reservation* create(int, int, std::string, std::string);
+	static Reservation* create(int user_id, int room_id, std::string start_date, std::string end_date, std::string note);
 	static std::string get_table_name();
 	static Reservation* get_by_id(int);
 	static Reservation* choice(std::vector<std::string>);

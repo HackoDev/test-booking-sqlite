@@ -50,7 +50,6 @@ void City::load_from_stmt(sqlite3_stmt *stmt)
 }
 City* City::get_by_id(int id)
 {
-
 	return BaseSQLiteModel::get_by_id<City>(id);
 };
 
@@ -89,6 +88,7 @@ City* City::create(int country_id, std::string title)
 	city->title = title;
 	city->country_id = country_id;
 	city->save();
+	city->bind_id(City::get_table_name());
 	return city;
 };
 

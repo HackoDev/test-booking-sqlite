@@ -99,6 +99,7 @@ User* User::create(std::string first_name, std::string second_name, std::string 
 	std::cout << "Date joined: " << user->date_joined << std::endl;
 	user->set_password(password);
 	user->save();
+	user->bind_id(User::get_table_name());
 	return user;
 };
 

@@ -67,6 +67,7 @@ Country* Country::create(std::string title)
 	Country *country = new Country();
 	country->title = title;
 	country->save();
+	country->bind_id(Country::get_table_name());
 	return country;
 };
 
@@ -74,5 +75,6 @@ Country* Country::choice(std::vector<std::string> fields)
 {
 	return BaseSQLiteModel::choice<Country>(fields);
 }
+
 
 std::vector<std::string> Country::db_sorted_fields = { "id", "title" };

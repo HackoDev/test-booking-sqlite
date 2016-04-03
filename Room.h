@@ -10,7 +10,8 @@ private:
 	std::string title;
 	std::string description;
 	int hotel_id;
-	int level;
+	int position;
+	float price;
 public:
 	Room();
 	~Room();
@@ -18,7 +19,8 @@ public:
 	// getters
 	int get_hotel_id();
 	Hotel* get_hotel();
-	int get_level();
+	int get_position();
+	float get_price();
 	std::string get_title();
 	std::string get_description();
 
@@ -26,8 +28,10 @@ public:
 	void set_title(std::string);
 	void set_hotel_id(int);
 	void set_hotel_id(Hotel*);
+	void set_position(int value);
+	void set_price(float value);
 	// managers
-	static Room* create(std::string, std::string, int, int);
+	static Room* create(std::string title, std::string description, int hotel_id, int position, float price);
 	static std::string get_table_name();
 	static Room* get_by_id(int);
 	static Room* choice(std::vector<std::string>);

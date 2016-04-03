@@ -47,6 +47,7 @@ Country* Reservation::get_country()
 
 Room* Reservation::get_room()
 {
+	std::cout << "Room id: " << room_id << std::endl;
 	return Room::get_by_id(room_id);
 };
 
@@ -55,14 +56,65 @@ Hotel* Reservation::get_hotel()
 	return this->get_room()->get_hotel();
 };
 
-Reservation* Reservation::create(int user_id, int room_id, std::string start_date, std::string end_date)
+void Reservation::set_start_date(std::string value)
+{
+	this->start_date = value;
+}
+
+void Reservation::set_start_date(std::time_t value)
+{
+	std::time_t now = std::time(NULL);
+	std::tm * ptm = std::localtime(&now);
+	char buffer[32];
+	// Format: Mo, 2009-06-15 20:20:00
+	std::strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", ptm);
+	this->start_date = std::string(buffer);
+}
+
+void Reservation::set_end_date(std::string value)
+{
+	this->end_date = value;
+}
+
+void Reservation::set_end_date(std::time_t value)
+{
+	std::time_t now = std::time(NULL);
+	std::tm * ptm = std::localtime(&now);
+	char buffer[32];
+	std::strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", ptm);
+	this->end_date = std::string(buffer);
+}
+
+void Reservation::set_price(float value)
+{
+	this->price = value;
+}
+
+void Reservation::set_note(std::string value)
+{
+	this->note = value;
+}
+
+float Reservation::get_price()
+{
+	return price;
+}
+
+std::string Reservation::get_note()
+{
+	return note;
+}
+
+Reservation* Reservation::create(int user_id, int room_id, std::string start_date, std::string end_date, std::string note)
 {
 	Reservation* reservation = new Reservation();
 	reservation->user_id = user_id;
 	reservation->room_id = room_id;
 	reservation->start_date = start_date;
 	reservation->end_date = end_date;
+	reservation->note = note;
 	reservation->save();
+	reservation->bind_id(Reservation::get_table_name());
 	return reservation;
 };
 
@@ -97,12 +149,12 @@ void Reservation::prepare_params()
 	std::string sql_raw;
 	if (id)
 		sql_raw = "UPDATE `" + get_table_name() + "`\
-				   SET `id`=? SET `user_id`=? `room_id`=? SET datetime=? \
+				   SET `user_id`=? `room_id`=? SET `start_date`=? SET `end_date`=? SET `note`=? \
 				   FROM `id`=?;";
 	else
 		sql_raw = "INSERT INTO `" + get_table_name() + "`\
-				   (`user_id`, `room_id`, `datetime`) \
-				    VALUES(?, ?, ?);";
+				   (`user_id`, `room_id`, `start_date`, `end_date`, `note`) \
+				    VALUES(?, ?, ?, ?, ?);";
 	std::cout << sql_raw << std::endl;
 	int rc = sqlite3_prepare_v2(db_link, sql_raw.c_str(), -1, &stmp, 0);
 	// data binding
@@ -110,9 +162,13 @@ void Reservation::prepare_params()
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
 	if (sqlite3_bind_int(stmp, 2, room_id) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
-	if (sqlite3_bind_text(stmp, 3, datetime.c_str(), -1, 0) != SQLITE_OK)
+	if (sqlite3_bind_text(stmp, 3, start_date.c_str(), -1, 0) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
-	if (id && sqlite3_bind_int(stmp, 4, id) != SQLITE_OK)
+	if (sqlite3_bind_text(stmp, 4, end_date.c_str(), -1, 0) != SQLITE_OK)
+		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
+	if (sqlite3_bind_text(stmp, 5, note.c_str(), -1, 0) != SQLITE_OK)
+		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
+	if (id && sqlite3_bind_int(stmp, 6, id) != SQLITE_OK)
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
 	// exec sql raw
 	if (sqlite3_step(stmp) != SQLITE_DONE)
@@ -126,7 +182,8 @@ void Reservation::load_from_stmt(sqlite3_stmt* stmt)
 	this->id = sqlite3_column_int(stmt, 0);
 	this->user_id = sqlite3_column_int(stmt, 1);
 	this->room_id = sqlite3_column_int(stmt, 2);
-	this->datetime = std::string((char*)sqlite3_column_text(stmt, 3));
+	this->start_date = std::string((char*)sqlite3_column_text(stmt, 3));
+	this->end_date= std::string((char*)sqlite3_column_text(stmt, 4));
 };
 
-std::vector<std::string> Reservation::db_sorted_fields = { "id", "user_id", "room_id", "datetime" };
+std::vector<std::string> Reservation::db_sorted_fields = { "id", "user_id", "room_id", "start_date", "end_date", "note"};
