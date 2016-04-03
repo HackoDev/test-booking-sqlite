@@ -40,8 +40,7 @@ int Hotel::get_city_id()
 
 City* Hotel::get_city()
 {
-	std::cout << "CITY ID " << city_id << std::endl;
-	return BaseSQLiteModel::get_by_id<City>(city_id);
+	return City::get_by_id(city_id);
 };
 
 Country* Hotel::get_country()

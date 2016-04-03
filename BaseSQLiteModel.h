@@ -38,7 +38,6 @@ protected:
 		std::string sql_raw = "SELECT " + T::get_joined_fiedls<T>() + " FROM `" + T::get_table_name() + "` WHERE id=?;";
 		if (DEBUG)
 			std::cout << sql_raw << std::endl;
-		std::cout << id << std::endl;
 		int rc = sqlite3_prepare_v2(db_link, sql_raw.c_str(), -1, &stmp, 0);
 		if (sqlite3_bind_int(stmp, 1, id) != SQLITE_OK)
 			std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;

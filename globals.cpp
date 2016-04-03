@@ -2,4 +2,4 @@
 #include <iostream>
 
 sqlite3* db_link = NULL;
-bool DEBUG = true;
+bool DEBUG = false;

@@ -65,7 +65,8 @@ void City::prepare_params()
 		sql_raw = "INSERT INTO `" + get_table_name() + "`\
 				   (`title`, `country_id`) \
 				   VALUES(?, ?);";
-	std::cout << sql_raw << std::endl;
+	if (DEBUG)
+		std::cout << sql_raw << std::endl;
 	int rc = sqlite3_prepare_v2(db_link, sql_raw.c_str(), -1, &stmp, 0);
 	// data binding
 	if (sqlite3_bind_text(stmp, 1, title.c_str(), -1, 0) != SQLITE_OK)

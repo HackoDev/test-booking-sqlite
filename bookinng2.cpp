@@ -236,19 +236,19 @@ void show_hotels_by_country()
 		std::cout << "SQL error: " << sqlite3_errmsg(db_link) << std::endl;
 		return;
 	}
-	std::vector<City*> cities;
 	int i = 0;
 	while (sqlite3_step(stmt) == SQLITE_ROW)
 	{
 		if (i == 0)
 		{
-			printf("%-10s %-20s %-10s", "ID", "Title", "City");
+			printf("%-10s %-20s %-20s\n", "ID", "Title", "City");
 		}
 		i++;
-		std::cout << "hotel id = " << sqlite3_column_name(stmt, 0) << std::endl;
-		std::cout << "hotel id = " << sqlite3_column_int(stmt, 0) << std::endl;
 		Hotel* hotel = Hotel::get_by_id(sqlite3_column_int(stmt, 0));
-		printf("%-10s %-20s %-10s\n", hotel->get_id(), hotel->get_title(), hotel->get_city()->get_title());
+		City* city = hotel->get_city();
+		printf("%-10d", hotel->get_id());
+		std::cout << hotel->get_title() << std::string(" ", 20-hotel->get_title().length());
+		std::cout << city->get_title() << std::string(" ", 20-city->get_title().length()) << std::endl;
 	}
 
 	sqlite3_finalize(stmt);
@@ -259,9 +259,11 @@ void show_hotels_by_country()
 		return;
 	}
 	int number;
+	std::cout << "Enter selected hotel: ";
 	std::cin >> number;
 	std::cin.ignore();
-	Hotel::get_by_id(number);
+	std::cout << std::endl;
+	//Hotel::get_by_id(number);
 }
 
 void show_city_by_city()
@@ -336,9 +338,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	Router* main = new Router("BOOKING-COM");
 	main->addRoute(admin_main);
 	main->addRoute(user_module);
-	
 	main->navigate();
-	//show_hotels_by_country();
 	system("pause");
 	return 0;
 }
