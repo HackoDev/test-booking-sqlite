@@ -258,12 +258,6 @@ void show_hotels_by_country()
 		std::cout << "No such hotels..." << std::endl;
 		return;
 	}
-	int number;
-	std::cout << "Enter selected hotel: ";
-	std::cin >> number;
-	std::cin.ignore();
-	std::cout << std::endl;
-	//Hotel::get_by_id(number);
 }
 
 void show_city_by_city()
@@ -331,7 +325,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	user_module->addRoute(new Router(logout_user, "Logout"));
 	user_module->addRoute(new Router(registration_user, "Registration"));
 	user_module->addRoute(new Router(add_reservations, "Add reservation"));
-	user_module->addRoute(new Router(show_hotels_by_country, "Show by city"));
+	user_module->addRoute(new Router(show_hotels_by_country, "Show hotels by country"));
 	
 
 	// main module

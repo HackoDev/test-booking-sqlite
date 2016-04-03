@@ -34,7 +34,10 @@ public:
 	static Room* create(std::string title, std::string description, int hotel_id, int position, float price);
 	static std::string get_table_name();
 	static Room* get_by_id(int);
-	static Room* choice(std::vector<std::string>);
+	static Room* choice(std::vector<std::string> fields, std::string sql_where = "")
+	{
+		return BaseSQLiteModel::choice<Room>(fields, sql_where);
+	};
 	static void check_free_by_date(std::string);
 	void prepare_params();
 	void load_from_stmt(sqlite3_stmt*);

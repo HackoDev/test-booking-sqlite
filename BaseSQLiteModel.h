@@ -108,7 +108,7 @@ public:
 
 		std::string sql_raw = "SELECT " + select_fields + " FROM " + BaseSQLiteModel::get_table_name<T>();
 		if (sql_where.length() > 0)
-			sql_raw += sql_where;
+			sql_raw += " " + sql_where;
 		sql_raw += ";";
 		if (DEBUG)
 			std::cout << sql_raw << std::endl;

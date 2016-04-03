@@ -91,11 +91,6 @@ Room* Room::get_by_id(int value)
 	return BaseSQLiteModel::get_by_id<Room>(value);
 };
 
-Room* Room::choice(std::vector<std::string> fields)
-{
-	return BaseSQLiteModel::choice<Room>(fields);
-};
-
 void Room::check_free_by_date(std::string)
 {
 
